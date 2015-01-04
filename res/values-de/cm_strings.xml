@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Forward lookup -->
+    <string name="nearby_places">Orte in der Nähe</string>
+    <string name="people">Personen</string>
+
+    <!-- Number lookup -->
+    <string name="lookup_settings_label">Telefonnummersuche</string>
+    <string name="lookup_settings_description">Suche nach unbekannten Telefonnummern</string>
+    <string name="enable_forward_lookup_title">Vorwärtssuche</string>
+    <string name="enable_forward_lookup_summary">Zeigt Orte in der Nähe, wenn im Telefon gesucht wird</string>
+    <string name="enable_people_lookup_title">Personensuche</string>
+    <string name="enable_people_lookup_summary">Zeigt Onlineresultate für Personen, wenn im Telefon gesucht wird</string>
+    <string name="enable_reverse_lookup_title">Rückwärtssuche</string>
+    <string name="enable_reverse_lookup_summary">Sucht nach Informationen über die Person oder den Ort für unbekannte Nummern bei einkommenden Anrufen</string>
+    <string name="forward_lookup_provider_title">Vorwärtssuche Anbieter</string>
+    <string name="people_lookup_provider_title">Personensuche Anbieter</string>
+    <string name="reverse_lookup_provider_title">Rückwärtssuche Anbieter</string>
+
+    <!-- Chinese Reverse Lookup Provider -->
+    <string name="cyngn_reverse_lookup_provider_package" translatable="false">com.cyngn.chineselocationlookup</string>
+    <string name="cyngn_reverse_lookup_provider_name">Cyngn Chinese (CN)</string>
+    <string name="cyngn_reverse_lookup_provider_value" translatable="false">CyngnChinese</string>
+
+    <!-- Description for incoming calls that were blacklisted -->
+    <string name="type_blacklist">Anruf auf der Blacklist</string>
+    <string name="menu_add_to_blacklist">Zur Blacklist hinzufügem</string>
+    <string name="toast_added_to_blacklist">%s zur Blacklist hinzugefügt.</string>
+
+    <!--  for speed dial -->
+    <string name="speed_dial_settings">Kurzwahleinstellungen</string>
+    <string name="speed_dial_not_set">(nicht gesetzt)</string>
+    <string name="speed_dial_replace">Ersetzen</string>
+    <string name="speed_dial_delete">Löschen</string>
+    <string name="speed_dial_unassigned_dialog_title">Taste unbelegt</string>
+    <string name="speed_dial_unassigned_dialog_message">Keine Kurzwahlaktion is auf der Taste \'<xliff:g id="number">%s</xliff:g>\' festgelegt. Möchtest du Sie mit einer Aktion belegen?</string>
+    <string name="dialog_speed_dial_airplane_mode_message">Um die Kurzwahl zu nutzen, deaktiviere zuerst den Flugzeugmodus.</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+
+    <string name="incall_vibration_category_title">In-Anruf Vibration</string>
+    <string name="incall_vibrate_outgoing_title">Bei Antwort vibrieren</string>
+    <string name="incall_vibrate_hangup_title">Beim Auflegen vibrieren</string>
+    <string name="incall_vibrate_45_title">Jede Minute vibrieren</string>
+    <string name="incall_vibrate_45_summary">Vibriert alle 45 Sekunden jeder Minute während ausgehenden Anrufen</string>
+</resources>
