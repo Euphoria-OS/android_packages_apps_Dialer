@@ -512,7 +512,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
             mIsRestarting = false;
         }
         prepareVoiceSearchButton();
-        mDialerDatabaseHelper.startSmartDialUpdateThread();
         updateFloatingActionButtonControllerAlignment(false /* animate */);
 
         // make this call on resume in case user changed t9 locale in settings
