@@ -19,6 +19,7 @@ package com.android.dialer.calllog;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.Intent;
@@ -32,18 +33,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.ViewTreeObserver;
 import android.widget.QuickContactBadge;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.contacts.common.CallUtil;
 import com.android.contacts.common.ContactPhotoManager;
 import com.android.contacts.common.ContactPhotoManager.DefaultImageRequest;
+import com.android.contacts.common.dialog.CallSubjectDialog;
 import com.android.contacts.common.testing.NeededForTesting;
 import com.android.contacts.common.util.UriUtils;
 import com.android.dialer.R;
-import com.android.dialer.calllog.CallLogAsyncTaskUtil;
 import com.android.dialer.util.DialerUtils;
 import com.android.dialer.util.PhoneNumberUtil;
 import com.android.dialer.voicemail.VoicemailPlaybackPresenter;
@@ -83,6 +82,7 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
     public View addToExistingContactButtonView;
     public View sendMessageView;
     public View detailsButtonView;
+    public View callWithNoteButtonView;
 
     /**
      * The row Id for the first call associated with the call log entry.  Used as a key for the
@@ -103,10 +103,20 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
     public String number;
 
     /**
+     * The formatted phone number to display.
+     */
+    public String displayNumber;
+
+    /**
      * The phone number presentation for the current call log entry.  Cached here as the call back
      * intent is set only when the actions ViewStub is inflated.
      */
     public int numberPresentation;
+
+    /**
+     * The type of the phone number (e.g. main, work, etc).
+     */
+    public String numberType;
 
     /**
      * The type of call for the current call log entry.  Cached here as the call back
@@ -132,6 +142,11 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
      * descriptions on buttons in the actions ViewStub when it is inflated.
      */
     public CharSequence nameOrNumber;
+
+    /**
+     * Whether this row is for a business or not.
+     */
+    public boolean isBusiness;
 
     /**
      * The contact info for the contact displayed in this list item.
@@ -248,6 +263,9 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
 
             detailsButtonView = actionsView.findViewById(R.id.details_action);
             detailsButtonView.setOnClickListener(this);
+
+            callWithNoteButtonView = actionsView.findViewById(R.id.call_with_note_action);
+            callWithNoteButtonView.setOnClickListener(this);
         }
 
         bindActionButtons();
@@ -352,6 +370,13 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
         sendMessageView.setTag(IntentProvider.getSendSmsIntentProvider(number));
 
         mCallLogListItemHelper.setActionContentDescriptions(this);
+
+        boolean supportsCallSubject =
+                mTelecomCallLogCache.doesAccountSupportCallSubject(accountHandle);
+        boolean isVoicemailNumber =
+                mTelecomCallLogCache.isVoicemailNumber(accountHandle, number);
+        callWithNoteButtonView.setVisibility(
+                supportsCallSubject && !isVoicemailNumber ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -449,7 +474,7 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
 
         String lookupKey = null;
         if (contactUri != null) {
-            lookupKey = ContactInfoHelper.getLookupKeyFromUri(contactUri);
+            lookupKey = UriUtils.getLookupKeyFromUri(contactUri);
         }
 
         DefaultImageRequest request = new DefaultImageRequest(
@@ -469,6 +494,19 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
         if (view.getId() == R.id.primary_action_button && !TextUtils.isEmpty(voicemailUri)) {
             mVoicemailPrimaryActionButtonClicked = true;
             mExpandCollapseListener.onClick(primaryActionView);
+        } else if (view.getId() == R.id.call_with_note_action) {
+            CallSubjectDialog.start(
+                    (Activity) mContext,
+                    info.photoId,
+                    info.photoUri,
+                    info.lookupUri,
+                    (String) nameOrNumber /* top line of contact view in call subject dialog */,
+                    isBusiness,
+                    number, /* callable number used for ACTION_CALL intent */
+                    TextUtils.isEmpty(info.name) ? null : displayNumber, /* second line of contact
+                                                                           view in dialog. */
+                    numberType, /* phone number type (e.g. mobile) in second line of contact view */
+                    accountHandle);
         } else {
             final IntentProvider intentProvider = (IntentProvider) view.getTag();
             if (intentProvider != null) {
